@@ -4,13 +4,24 @@ def filed(data):
     #name type AUTO_INCREMENT UNSIGNED PRIMARY_key UNIQUE COMMENT
     filed_body = ""
     filed_body+=data["filed_name"]+" "
-    filed_body+=data["type"]+" "
+    filed_body+=data["filed_type"]
+
+    if "size" in data:
+        if data["size"] != 0:
+            filed_body += "({}) ".format(data["size"])
+    filed_body+=" "
     if "AUTO_INCREMENT" in data:
         if data["AUTO_INCREMENT"] == True:
             filed_body+="AUTO_INCREMENT  "
     if "primary_key" in data:
         if data["primary_key"] == True:
             filed_body += "PRIMARY KEY "
+    if data["primary_key"] == True:
+        filed_body += "PRIMARY KEY "
+    if data["null"] == True:
+        filed_body += "not null "
+    if data["union"] == True:
+        filed_body += "union "
 
     if "COMMENT" in data:
         if data["COMMENT"] != "":
@@ -42,53 +53,36 @@ def product_sqls(data):
 
 if __name__ == '__main__':
 
-
+    #仅考虑正常字段，未考虑唯一索引
     arr = []
     #字段构造数据
-    data = {"filed_name":"name","type":"varchar(50)","AUTO_INCREMENT":False,
-            "primary_key":False,"COMMENT":"姓名"}
+    data = {"filed_name":"name","filed_type":"varchar","size":300,"AUTO_INCREMENT":False,
+            "primary_key":False,"null":"null","COMMENT":"姓名","union":False}
     filed_sql = filed(data)
+    print(filed_sql)
     arr.append(data)
     print(filed_sql)
-    data = {"filed_name":"age","type":"int","AUTO_INCREMENT":False,
-            "primary_key":False,"COMMENT":"年龄"}
+    data = {"filed_name":"age","filed_type":"int","size":20,"AUTO_INCREMENT":False,
+            "primary_key":False,"null":"null","COMMENT":"姓名","union":False}
 
     filed_sql = filed(data)
     arr.append(data)
-
+    #
     print(filed_sql)
-    #完整sql创建表方法
+    # #完整sql创建表方法
     product_sql("person",arr)
-
-    #多表
+    #
+    # #多表
     db_dabase = {
         "person":[
-            {"filed_name": "name", "type": "varchar(50)", "AUTO_INCREMENT": False,
-             "primary_key": False, "COMMENT": ""},
-            {"filed_name": "age", "type": "int", "AUTO_INCREMENT": False,
-             "primary_key": False, "COMMENT": ""},
-            {"filed_name": "e_mail", "type": "varchar(50)", "AUTO_INCREMENT": False,
-             "primary_key": True, "COMMENT": ""},
-            {"filed_name": "addr", "type": "varchar(50)", "AUTO_INCREMENT": False,
-             "primary_key": False, "COMMENT": ""}
-        ],"person1":[
-            {"filed_name": "name", "type": "varchar(50)", "AUTO_INCREMENT": False,
-             "primary_key": False, "COMMENT": ""},
-            {"filed_name": "age", "type": "int", "AUTO_INCREMENT": False,
-             "primary_key": False, "COMMENT": ""},
-            {"filed_name": "e_mail", "type": "varchar(50)", "AUTO_INCREMENT": False,
-             "primary_key": True, "COMMENT": ""},
-            {"filed_name": "addr", "type": "varchar(50)", "AUTO_INCREMENT": False,
-             "primary_key": False, "COMMENT": ""}
-        ],"person2":[
-            {"filed_name": "name", "type": "varchar(50)", "AUTO_INCREMENT": False,
-             "primary_key": False, "COMMENT": ""},
-            {"filed_name": "age", "type": "int", "AUTO_INCREMENT": False,
-             "primary_key": False, "COMMENT": ""},
-            {"filed_name": "e_mail", "type": "varchar(50)", "AUTO_INCREMENT": False,
-             "primary_key": True, "COMMENT": ""},
-            {"filed_name": "addr", "type": "varchar(50)", "AUTO_INCREMENT": False,
-             "primary_key": False, "COMMENT": ""}
+            {"filed_name": "name", "filed_type": "varchar", "size": 100, "AUTO_INCREMENT": False,
+             "primary_key": False, "null": "null", "COMMENT": "姓名", "union": False},
+            {"filed_name": "age", "filed_type": "int", "size": 20, "AUTO_INCREMENT": False,
+             "primary_key": False, "null": "null", "COMMENT": "姓名", "union": False},
+            {"filed_name": "email", "filed_type": "varchar", "size": 100, "AUTO_INCREMENT": False,
+             "primary_key": False, "null": "null", "COMMENT": "姓名", "union": False},
+            {"filed_name": "addr", "filed_type": "varchar", "size": 100, "AUTO_INCREMENT": False,
+             "primary_key": False, "null": "null", "COMMENT": "姓名", "union": False}
         ]
     }
     product_sqls(db_dabase)
